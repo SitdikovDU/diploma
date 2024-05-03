@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.spatial.distance import pdist
 
 def create_covariances(k : int, min_val : float, max_val : float) -> list:
     """
@@ -38,7 +39,7 @@ def create_long_covariances(k : int, min_val : float, max_val : float) -> list:
     for i in range(1, k+1):
         covariances.append([[1, 0], [0, (min_val + step*i)**2]])
 
-    return np.array(covariances).reshape()
+    return np.array(covariances)
 
 
 def rotate_matrix(matrix, phi):
@@ -57,7 +58,7 @@ def rotate_matrix(matrix, phi):
     
     return rotation_matrix @ matrix @ rotation_matrix.T
 
-def generate_groups(covariances, groups=20, l=10, r=20, a=0, b=100):
+def generate_groups(covariances, groups=20, l=10, r=20, a=0, b=100, min_center=1):
     """
     Generate synthetic data points based on specified parameters.
 
@@ -74,6 +75,9 @@ def generate_groups(covariances, groups=20, l=10, r=20, a=0, b=100):
     """
     
     centers = np.random.uniform(a, b, [groups,2])
+    while(pdist(centers).min() < min_center):
+        centers = np.random.uniform(a, b, [groups,2])
+        
     data = []
     covs_ind = np.random.randint(0, len(covariances), size=groups)
     covs = covariances[covs_ind]
