@@ -65,9 +65,10 @@ def plot_result(data, model, true_covs=None, print_labels=False):
     labels, covs = model.predict()
     
     plt.title(title)
-    plt.scatter(data[:, 0], data[:, 1], s = 8, label='points', c=labels)
+    plt.scatter(data[:, 0], data[:, 1], s = 15, label='points', c=labels)
     plt.scatter(model.means_[:, 0], model.means_[:, 1], marker='s')
-
+    plt.xlabel("x", fontsize=15)
+    plt.ylabel("y", fontsize=15)
     covs = np.array(covs)
     matrix = model.E_step()
 
